@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Capture</title>
+  </head>
+<body>
+<!-- video -->
+<p>Video:</p>
+<video id="scream" width="400" controls>
+  <source src="video1.mp4" type="video/mp4" />
+</video>
+<br>
+<!-- capture button -->
+<button id="capture" type="button" name="button">capture</button>
+<!-- canvase -->
+<p>Canvas:</p>
+<canvas id="canvas" width="600" height="300" style="display:none;">
+</canvas>
+<p>Image:</p>
+<img id="image">
+<br>
+<!-- save button -->
+<button id="save" type="button" name="button">save</button>
+
+<!-- jquery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- script code -->
+<script type="text/javascript">
+  let capture_btn = $("#capture");
+  let save_btn = $("#save");
+  let canvas = $("#canvas");
+  let image = $("#image");
+  /*
+    snapshot function
+  */
+  function capture_draw(){
+    let ctx = canvas[0].getContext("2d");
+    let img = $("#scream");
+    ctx.drawImage(img[0], 10, 10);
+    image[0].src = canvas[0].toDataURL("image/png");
+  }
+  function save(){
+    let data = canvas[0].toDataURL("image/png");
+    $.ajax({
+        url:'./Save.php',//save
+        type:'POST',
+        data:{
+          data: data
+        },
+        success:function(data){
+            alert(data);
+        }
+    })
+  }
+  capture_btn.click(function(){
+    capture_draw();
+  });
+  save_btn.click(function(){
+    save();
+  });
+</script>
+</body>
+</html>
